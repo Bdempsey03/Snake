@@ -6,7 +6,7 @@ import java.awt.event.MouseEvent;
 public class GUI {
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame();
+        JFrame frame = new JFrame("Snake Game");
         Canvas canvas = new Canvas();
         frame.setSize(1000, 1000);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

@@ -1,8 +1,7 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -14,8 +13,8 @@ public class Canvas extends JComponent {
     public static java.util.Random rnd = new Random();
     public static BufferedImage queen;
     private static boolean moved = false;
-    private static int x;
-    private static int y;
+    private static int x = 300;
+    private static int y = 300;
     private static int rndCPUx = 500;
     private static int rndCPUy = 500;
     private static int smrtCPUx = 500;
@@ -26,21 +25,52 @@ public class Canvas extends JComponent {
     private static Color[] colours = {Color.BLUE, Color.RED, Color.PINK, Color.CYAN, Color.ORANGE, Color.GREEN, Color.MAGENTA};
 
     public Canvas(){
-        this.addMouseMotionListener(new MouseAdapter() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                System.out.println("hello");
-                moved =true;
-                x = getMousePosition().x-5;
-                y = getMousePosition().y-5;
-                repaint();
-                    try {
-                        Thread.sleep(1);
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
+        setFocusable(true);
+        requestFocusInWindow();
+        this.addKeyListener(
+                new KeyAdapter(){
+                    @Override
+                    public void keyPressed(KeyEvent e){
+
+                        if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                            moved=true;
+                            y+=10;
+                            repaint();
+                        }
+                        if (e.getKeyCode() == KeyEvent.VK_UP) {
+                            moved=true;
+                            y-=10;
+                            repaint();
+                        }
+                        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                            moved=true;
+                            x-=10;
+                            repaint();
+                        }
+                        if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                            moved=true;
+                            x+=10;
+                            repaint();
+                        }
                     }
-            }
+
+
+//                new MouseAdapter() {
+//            @Override
+//            public void mouseMoved(MouseEvent e) {
+//                System.out.println("hello");
+//                moved =true;
+//                x = getMousePosition().x-5;
+//                y = getMousePosition().y-5;
+//                repaint();
+//                    try {
+//                        Thread.sleep(1);
+//                    } catch (InterruptedException ex) {
+//                        ex.printStackTrace();
+//                    }
+//            }
         });
+
 
 
     }
