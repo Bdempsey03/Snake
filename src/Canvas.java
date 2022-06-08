@@ -13,8 +13,8 @@ public class Canvas extends JComponent {
     public static java.util.Random rnd = new Random();
     public static BufferedImage queen;
     private static boolean moved = false;
-    private static int x = 300;
-    private static int y = 300;
+    private static int x = 500;
+    private static int y = 500;
     private static int rndCPUx = 500;
     private static int rndCPUy = 500;
     private static int smrtCPUx = 500;
@@ -23,6 +23,7 @@ public class Canvas extends JComponent {
     private static ArrayList<CirclePosition> rndCPUExistingCircles = new ArrayList<>();
     private static ArrayList<CirclePosition> smrtCPUExistingCircles = new ArrayList<>();
     private static Color[] colours = {Color.BLUE, Color.RED, Color.PINK, Color.CYAN, Color.ORANGE, Color.GREEN, Color.MAGENTA};
+    private static char direction = 'd';
 
     public Canvas(){
         setFocusable(true);
@@ -33,24 +34,16 @@ public class Canvas extends JComponent {
                     public void keyPressed(KeyEvent e){
 
                         if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-                            moved=true;
-                            y+=10;
-                            repaint();
+                            direction='d';
                         }
                         if (e.getKeyCode() == KeyEvent.VK_UP) {
-                            moved=true;
-                            y-=10;
-                            repaint();
+                            direction='u';
                         }
                         if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                            moved=true;
-                            x-=10;
-                            repaint();
+                            direction='l';
                         }
                         if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                            moved=true;
-                            x+=10;
-                            repaint();
+                            direction='r';
                         }
                     }
 
@@ -80,9 +73,27 @@ public class Canvas extends JComponent {
         g2d.setColor(Color.WHITE);
         g2d.fillRect(0,0,1000,1000);
         g2d.setColor(Color.BLACK);
-        if(moved){
+        System.out.println(direction);
+        switch(direction){
+            case('d'): y+=10;
+            break;
+            case('u'): y-=10;
+            break;
+            case('l'): x-=10;
+            break;
+            case('r'): x+=10;
+                break;
+        }
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
             int i = 0;
+
             playerExistingCircles.add(new CirclePosition(x, y));
+            /*
             rndCPUx +=rnd.nextInt(11)-5;
             rndCPUy +=rnd.nextInt(11)-5;
             rndCPUExistingCircles.add(new CirclePosition(rndCPUx, rndCPUy));
@@ -91,27 +102,46 @@ public class Canvas extends JComponent {
 
             smrtCPUExistingCircles.add(new CirclePosition(smrtCPUx, smrtCPUy));
 
+            more AI code
+*/
 
             if(playerExistingCircles.size()>50){
                 playerExistingCircles.remove(0);
 //                if(smrtCPUExistingCircles.size()>25) {
-                    rndCPUExistingCircles.remove(0);
-                    smrtCPUExistingCircles.remove(0);
+//                    rndCPUExistingCircles.remove(0);
+//                    smrtCPUExistingCircles.remove(0);
 //                }
             }
             while(i<playerExistingCircles.size()) {
+//                g2d.setColor(colours[i%7]);
+                g2d.fillOval(playerExistingCircles.get(i).getX(), playerExistingCircles.get(i).getY(), 10, 10);
+                /*
                 g2d.setColor(Color.RED);
                 g2d.fillOval(rndCPUExistingCircles.get(i).getX(), rndCPUExistingCircles.get(i).getY(),10,10);
-                g2d.setColor(colours[i%7]);
-                g2d.fillOval(playerExistingCircles.get(i).getX(), playerExistingCircles.get(i).getY(), 10, 10);
                 g2d.setColor(Color.BLACK);
                 g2d.fillOval(smrtCPUExistingCircles.get(i).getX(),smrtCPUExistingCircles.get(i).getY(), 10, 10);
+
+                above code will draw AI
+                */
+
 //                Image();
 //                g2d.drawImage(queen,playerExistingCircles.get(i).getX(),playerExistingCircles.get(i).getY(), null );
                 i++;
-            }
-                moved = false;
         }
+//            if(playerExistingCircles.size()>5)
+//            for(int j=0; j>=50; j++){
+//                if(playerExistingCircles.size()>=j) {
+//                    if (playerExistingCircles.get(j).equals(playerExistingCircles.get(j)))
+//                        playerExistingCircles.clear();
+//                    repaint();
+//                }
+//            }
+
+            if(CirclePosition.checkDuplicate(playerExistingCircles.get(playerExistingCircles.size()-1), playerExistingCircles)){
+                playerExistingCircles.clear();
+                
+            }
+        repaint();
     }
     public static void Image(){
         try {
@@ -134,4 +164,5 @@ public class Canvas extends JComponent {
         }
 
     }
+
     }
