@@ -23,8 +23,8 @@ public CirclePosition(int x, int y){
     /**
      * If any circles are overlapping then this will return true
      *
-     * @param circleArray
-     * @return
+     * @param circleArray array of circle positions
+     * @return true if duplicate circles, else false
      */
     public static boolean checkDuplicate(CirclePosition head, ArrayList<CirclePosition> circleArray){
         for(int i = 2; i<circleArray.size(); i++) {
