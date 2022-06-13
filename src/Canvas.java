@@ -112,7 +112,7 @@ public class Canvas extends JComponent {
         if((snake.getHead().getX()<0||snake.getHead().getY()>1000)||(snake.getHead().getX()<0||snake.getHead().getX()>1000)){
             snake.reset();
         }
-        if(pelletAte(snake.getExistingCircles().get(snake.getLength()-1), pellet.getPos())) {
+        if(pelletAte(snake.getExistingCircles().get(snake.getLength()-2), pellet.getPos())) {
             snake.incrementPelletsAte();
             pellet.setAte(true);
             pellet.ate();
