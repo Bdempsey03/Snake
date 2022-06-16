@@ -1,13 +1,17 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
 
 
 public class Canvas extends JComponent {
     private static Color color;
     private static int circleSize;
-    private static final int windowSize = 800;
+    private static final int windowSize = 700;
 
     private final Snake snake = new Snake();
     private final Pellet pellet = new Pellet();
@@ -22,6 +26,10 @@ public class Canvas extends JComponent {
 
 
     private static int HIGHSCORE = 0;
+    private static String livesString = "";
+
+    private static BufferedImage GAME_OVER;
+    private static boolean gameOver = false;
 
     /**
      * Constructs the canvas graphical object. Contains the keyboard listener for arrow key
@@ -49,21 +57,42 @@ public class Canvas extends JComponent {
                         requestFocusInWindow();
                     }
                 });
+        try {
+            GAME_OVER = ImageIO.read(new File("C:\\Users\\Ben\\IdeaProjects\\Painter\\src\\GameOver2.png"));
+        } catch (IOException e) {
+            System.out.println("image error");
+        }
     }
 
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.WHITE);
         g2d.fillRect(0, 0, windowSize, windowSize);
-        g2d.setFont(new Font("Times New Roman", Font.BOLD, windowSize/10));
+        g2d.setFont(new Font("Times New Roman", Font.BOLD, windowSize/20));
 
 
         g2d.setColor(Color.GRAY);
 
 
-        g2d.drawString("Length: "+ snake.getLength(), windowSize/5, windowSize/8);
+        g2d.drawString("Length: "+ snake.getLength(), windowSize/10, windowSize/8);
         g2d.setFont(new Font("Times New Roman", Font.BOLD, windowSize/20));
-        g2d.drawString("HIGHSCORE: "+ HIGHSCORE, (windowSize/10), windowSize-windowSize/5 );
+        g2d.drawString("HIGHSCORE: "+ HIGHSCORE, (windowSize/10), windowSize-windowSize/10 );
+
+        switch (snake.getLives()) {
+            case (5) -> livesString = "♥♥♥♥♥";
+            case (4) -> livesString = "♥♥♥♥";
+            case (3) -> livesString = "♥♥♥";
+            case (2) -> livesString = "♥♥";
+            case (1) -> livesString = "♥";
+            case (0) -> livesString = "";
+        }
+
+        g2d.drawString("Lives| ", (windowSize-(windowSize/3)), windowSize-windowSize/10);
+        g2d.setColor(Color.RED);
+        g2d.drawString(livesString, windowSize-(windowSize/3)+windowSize/8, windowSize-windowSize/10);
+
+
+
         switch (direction) {
             case ('d') -> y += 10;
             case ('u') -> y -= 10;
@@ -74,7 +103,10 @@ public class Canvas extends JComponent {
             Thread.sleep(waitTime);
             if(FLAG)
                 Thread.sleep(900);
+            if(gameOver)
+                Thread.sleep(3000);
             setFLAG(false);
+            gameOver=false;
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -124,6 +156,14 @@ public class Canvas extends JComponent {
             pellet.setAte(true);
             pellet.ate();
         }
+
+        if(snake.getLives()==0){
+            snake.setLives(3);
+            g2d.scale((float)windowSize/GAME_OVER.getHeight(), (float)windowSize/GAME_OVER.getHeight());
+            g2d.drawImage(GAME_OVER, 0, 0, Color.black, null);
+            gameOver();
+            g2d.scale(1,1);
+        }
         repaint();
 
     }
@@ -157,5 +197,8 @@ public class Canvas extends JComponent {
     }
     public static int getHIGHSCORE() {
         return HIGHSCORE;
+    }
+    public static void gameOver(){
+        gameOver=true;
     }
 }
