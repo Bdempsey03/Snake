@@ -5,19 +5,23 @@ import java.util.Scanner;
 
 
 public class Canvas extends JComponent {
-    private Color color;
-    private int circleSize;
+    private static Color color;
+    private static int circleSize;
+    private static final int windowSize = 800;
 
     private final Snake snake = new Snake();
     private final Pellet pellet = new Pellet();
-    private static int x = 500;
-    private static int y = 500;
-    private static final Color[] colours = {Color.BLUE, Color.GREEN, Color.MAGENTA};
+
+    private static int x = windowSize/2;
+    private static int y = windowSize/2;
+    private static final Color[] colours = {Color.GREEN};
+//            Color.BLUE, Color.GREEN, Color.MAGENTA};
     private static char direction = 'l';
-    private final int windowSize = 1000;
     public static volatile boolean FLAG = false;
-    public static boolean init = false;
-    public Scanner scanner;
+    private static int waitTime = 50;
+
+
+    private static int HIGHSCORE = 0;
 
     /**
      * Constructs the canvas graphical object. Contains the keyboard listener for arrow key
@@ -30,7 +34,6 @@ public class Canvas extends JComponent {
                 new KeyAdapter() {
                     @Override
                     public void keyPressed(KeyEvent e) {
-
                         if (e.getKeyCode() == KeyEvent.VK_DOWN) {
                             direction = 'd';
                         }
@@ -51,20 +54,16 @@ public class Canvas extends JComponent {
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.WHITE);
-        g2d.fillRect(0, 0, 1000, 1000);
-        g2d.setFont(new Font("Times New Roman", Font.BOLD, 100));
-//        if(!init){
-//            scanner = new Scanner(System.in);
-//            init=true;
-//            g2d.setColor(Color.BLACK);
-//            g2d.drawString("Select:", 250, 100);
-//            scanner.nextInt();
-//        }
+        g2d.fillRect(0, 0, windowSize, windowSize);
+        g2d.setFont(new Font("Times New Roman", Font.BOLD, windowSize/10));
+
 
         g2d.setColor(Color.GRAY);
-//        System.out.println(direction);
 
-        g2d.drawString("Length: "+ snake.getLength(), 250, 100);
+
+        g2d.drawString("Length: "+ snake.getLength(), windowSize/5, windowSize/8);
+        g2d.setFont(new Font("Times New Roman", Font.BOLD, windowSize/20));
+        g2d.drawString("HIGHSCORE: "+ HIGHSCORE, (windowSize/10), windowSize-windowSize/5 );
         switch (direction) {
             case ('d') -> y += 10;
             case ('u') -> y -= 10;
@@ -72,7 +71,7 @@ public class Canvas extends JComponent {
             case ('r') -> x += 10;
         }
         try {
-            Thread.sleep(100);
+            Thread.sleep(waitTime);
             if(FLAG)
                 Thread.sleep(900);
             setFLAG(false);
@@ -99,18 +98,26 @@ public class Canvas extends JComponent {
         if (CirclePosition.checkDuplicate(snake.getExistingCircles().get(snake.getExistingCircles().size() - 1), snake.getExistingCircles()))
          {
             setFLAG(true);
-            snake.getExistingCircles().clear();
             snake.reset();
-            g2d.drawString("Collision!", 400,400);
+
             g2d.setColor(Color.RED);
-            g2d.fillRect(0, 0, 1000, 1000);
+            g2d.fillRect(0, 0, windowSize, windowSize);
             g2d.setColor(Color.BLACK);
-            g2d.setFont(new Font("Times New Roman", Font.BOLD,100));
-            g2d.drawString("Collision!", 300,400);
+            g2d.setFont(new Font("Times New Roman", Font.BOLD,windowSize/10));
+            g2d.drawString("Collision!", windowSize/3,windowSize/2);
             repaint();
         }
-        if((snake.getHead().getX()<0||snake.getHead().getY()>1000)||(snake.getHead().getX()<0||snake.getHead().getX()>1000)){
+        if((snake.getHead().getY()<0||snake.getHead().getY()>windowSize)||(snake.getHead().getX()<0||snake.getHead().getX()>windowSize)){
+            setFLAG(true);
             snake.reset();
+            System.out.println("hi");
+
+            g2d.setColor(Color.RED);
+            g2d.fillRect(0, 0, windowSize, windowSize);
+            g2d.setColor(Color.BLACK);
+            g2d.setFont(new Font("Times New Roman", Font.BOLD,windowSize/10));
+            g2d.drawString("Collision!", windowSize/3,windowSize/2);
+            repaint();
         }
         if(pelletAte(snake.getExistingCircles().get(snake.getLength()-2), pellet.getPos())) {
             snake.incrementPelletsAte();
@@ -140,5 +147,15 @@ public class Canvas extends JComponent {
     }
     public void setCircleSize(int circleSize){
         this.circleSize = circleSize;
+    }
+    public static int getWindowSize(){return windowSize;}
+    public static void setX(int x){Canvas.x=x;}
+    public static void setY(int y){Canvas.y=y;}
+
+    public static void setHIGHSCORE(int HIGHSCORE) {
+        Canvas.HIGHSCORE = HIGHSCORE;
+    }
+    public static int getHIGHSCORE() {
+        return HIGHSCORE;
     }
 }

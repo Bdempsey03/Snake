@@ -10,14 +10,20 @@ private static int circleSize;
         JFrame frame = new JFrame("Snake Game");
         Canvas canvas = new Canvas();
         Info info = new Info();
-        frame.setSize(1000, 1000);
+        frame.setSize(Canvas.getWindowSize(), Canvas.getWindowSize());
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.setLayout(new GridLayout(1,1));
-        frame.add(info);
+//        frame.add(info);
+
+//        try {
+//            Thread.sleep(1000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
         canvas.setColor(color);
-//        canvas.setCircleSize(circleSize);
-        frame.remove(info);
+//        frame.remove(info);
         frame.add(canvas);
 
         }

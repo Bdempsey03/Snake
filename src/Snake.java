@@ -4,6 +4,7 @@ public class Snake {
     private final ArrayList<CirclePosition> existingCircles;
     private int pelletsAte;
     private int length=2;
+//    private static int windowSize = Canvas.getWindowSize();
 
     public Snake(){
         existingCircles = new ArrayList<>();
@@ -26,11 +27,16 @@ public class Snake {
         setLength();
     }
     public void reset(){
+        if(length>Canvas.getHIGHSCORE())
+        Canvas.setHIGHSCORE(length);
+
         pelletsAte=0;
         setLength();
         existingCircles.clear();
-        existingCircles.add(new CirclePosition(500, 500));
-        existingCircles.add(new CirclePosition(500, 510));
+        Canvas.setX(Canvas.getWindowSize()/2);
+        Canvas.setY(Canvas.getWindowSize()/2);
+        existingCircles.add(new CirclePosition(Canvas.getWindowSize()/2, Canvas.getWindowSize()/2));
+        existingCircles.add(new CirclePosition(Canvas.getWindowSize()/2, Canvas.getWindowSize()/2+10));
     }
     public CirclePosition getHead(){
         return existingCircles.get(existingCircles.size()-1);

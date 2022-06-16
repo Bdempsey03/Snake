@@ -1,7 +1,8 @@
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class DifficultyButton {
+public class DifficultyButton extends JComponent {
     private int circleSize;
     private String diff;
     private ActionListener AL = new ActionListener() {

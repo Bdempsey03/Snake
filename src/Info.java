@@ -13,6 +13,12 @@ public class Info extends JPanel {
 
     public Info(){
         this.setLayout(new GridLayout(2,3));
-        this.setSize(1000,1000);
+        this.setSize(Canvas.getWindowSize(),Canvas.getWindowSize());
+        this.add(red);
+        this.add(blue);
+        this.add(purple);
+        this.add(easy);
+        this.add(medium);
+        this.add(hard);
     }
 }
