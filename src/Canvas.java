@@ -5,24 +5,33 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Scanner;
 
 
 public class Canvas extends JComponent {
     private static Color color;
-    private static int circleSize;
-    private static final int windowSize = 700;
+    /**
+
+    NOTE: (windowSize/2) must be a multiple of (circleSize)
+
+    valid: windowSize=1000;
+           circleSize=50;
+
+    invalid: windowSize=700;
+             circleSize=20;
+
+     */
+    private static int circleSize = 40;
+    private static final int windowSize = 800;
 
     private final Snake snake = new Snake();
     private final Pellet pellet = new Pellet();
 
     private static int x = windowSize/2;
     private static int y = windowSize/2;
-    private static final Color[] colours = {Color.GREEN};
-//            Color.BLUE, Color.GREEN, Color.MAGENTA};
+    private static final Color[] colours = {Color.GREEN, new Color(10,200,10)};
     private static char direction = 'l';
     public static volatile boolean FLAG = false;
-    private static int waitTime = 50;
+    private static int waitTime = 100;
 
 
     private static int HIGHSCORE = 0;
@@ -30,6 +39,8 @@ public class Canvas extends JComponent {
 
     private static BufferedImage GAME_OVER;
     private static boolean gameOver = false;
+
+    private static boolean noLives = false;
 
     /**
      * Constructs the canvas graphical object. Contains the keyboard listener for arrow key
@@ -58,7 +69,7 @@ public class Canvas extends JComponent {
                     }
                 });
         try {
-            GAME_OVER = ImageIO.read(new File("C:\\Users\\Ben\\IdeaProjects\\Painter\\src\\GameOver2.png"));
+            GAME_OVER = ImageIO.read(new File("C:\\Users\\Ben\\IdeaProjects\\Painter\\src\\GameOver.png"));
         } catch (IOException e) {
             System.out.println("image error");
         }
@@ -76,7 +87,7 @@ public class Canvas extends JComponent {
 
         g2d.drawString("Length: "+ snake.getLength(), windowSize/10, windowSize/8);
         g2d.setFont(new Font("Times New Roman", Font.BOLD, windowSize/20));
-        g2d.drawString("HIGHSCORE: "+ HIGHSCORE, (windowSize/10), windowSize-windowSize/10 );
+        g2d.drawString("HIGH SCORE: "+ HIGHSCORE, (windowSize/10), windowSize-windowSize/10 );
 
         switch (snake.getLives()) {
             case (5) -> livesString = "♥♥♥♥♥";
@@ -94,10 +105,10 @@ public class Canvas extends JComponent {
 
 
         switch (direction) {
-            case ('d') -> y += 10;
-            case ('u') -> y -= 10;
-            case ('l') -> x -= 10;
-            case ('r') -> x += 10;
+            case ('d') -> y += circleSize;
+            case ('u') -> y -= circleSize;
+            case ('l') -> x -= circleSize;
+            case ('r') -> x += circleSize;
         }
         try {
             Thread.sleep(waitTime);
@@ -117,20 +128,24 @@ public class Canvas extends JComponent {
 
         if (snake.getExistingCircles().size() > snake.getLength()) {
             snake.getExistingCircles().remove(0);
-
         }
         while (i < snake.getExistingCircles().size()) {
             g2d.setColor(colours[i%(colours.length)]);
-            g2d.fillOval(snake.getExistingCircles().get(i).getX(), snake.getExistingCircles().get(i).getY(), 10, 10);
+            g2d.fillOval(snake.getExistingCircles().get(i).getX(), snake.getExistingCircles().get(i).getY(), circleSize, circleSize);
+
+//            System.out.println("\033[0;31m"+snake.getExistingCircles().get(i) + "\033[0m");
+
             i++;
+
         }
         g2d.setColor(Color.cyan);
-        g2d.fillOval(pellet.getX(), pellet.getY(), 10, 10);
+        g2d.fillOval(pellet.getX(), pellet.getY(), circleSize, circleSize);
 
         if (CirclePosition.checkDuplicate(snake.getExistingCircles().get(snake.getExistingCircles().size() - 1), snake.getExistingCircles()))
          {
             setFLAG(true);
             snake.reset();
+
 
             g2d.setColor(Color.RED);
             g2d.fillRect(0, 0, windowSize, windowSize);
@@ -151,14 +166,16 @@ public class Canvas extends JComponent {
             g2d.drawString("Collision!", windowSize/3,windowSize/2);
             repaint();
         }
-        if(pelletAte(snake.getExistingCircles().get(snake.getLength()-2), pellet.getPos())) {
+        if(pelletAte(snake.getExistingCircles().get(snake.getExistingCircles().size()-1), pellet.getPos())) {
             snake.incrementPelletsAte();
             pellet.setAte(true);
             pellet.ate();
         }
 
-        if(snake.getLives()==0){
+        if(noLives){
+            toggleNoLives();
             snake.setLives(3);
+            snake.setLength();
             g2d.scale((float)windowSize/GAME_OVER.getHeight(), (float)windowSize/GAME_OVER.getHeight());
             g2d.drawImage(GAME_OVER, 0, 0, Color.black, null);
             gameOver();
@@ -200,5 +217,12 @@ public class Canvas extends JComponent {
     }
     public static void gameOver(){
         gameOver=true;
+    }
+
+    public static int getCircleSize() {
+        return circleSize;
+    }
+    public static void toggleNoLives(){
+        noLives=!noLives;
     }
 }

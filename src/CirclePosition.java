@@ -1,11 +1,9 @@
-import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 
 
 public class CirclePosition {
-private final int x;
-private final int y;
+private int x;
+private int y;
 
 public CirclePosition(int x, int y){
     this.x=x;
@@ -34,8 +32,13 @@ public CirclePosition(int x, int y){
         return false;
     }
 
-
-
+    /**
+     * Returns invoker to center of screen.
+     */
+    public void setDefaultPosition(){
+        x=Canvas.getWindowSize()/2;
+        y=Canvas.getWindowSize()/2;
+    }
     public String toString(){
         return (""+x+"-"+y);
     }

@@ -6,7 +6,7 @@ public class Pellet {
     private boolean ate = false;
 
     public Pellet() {
-        pos = new CirclePosition(Canvas.getWindowSize()/5+(rnd.nextInt(Canvas.getWindowSize()/5*3) / 10 * 10), Canvas.getWindowSize()/5+(rnd.nextInt(Canvas.getWindowSize()/5*3) / 10 * 10));
+        pos = new CirclePosition(Canvas.getWindowSize()/5+(rnd.nextInt(Canvas.getWindowSize()/5*3) / Canvas.getCircleSize() * Canvas.getCircleSize()), Canvas.getWindowSize()/5+(rnd.nextInt(Canvas.getWindowSize()/5*3) / Canvas.getCircleSize() * Canvas.getCircleSize()));
     }
 
     public int getX() {
@@ -23,7 +23,7 @@ public class Pellet {
 
     public void ate() {
         if (ate) {
-            pos = new CirclePosition(Canvas.getWindowSize()/5+(rnd.nextInt(Canvas.getWindowSize()/5*3) / 10 * 10), Canvas.getWindowSize()/5+(rnd.nextInt(Canvas.getWindowSize()/5*3) / 10 * 10));
+            pos = new CirclePosition(Canvas.getWindowSize()/5+(rnd.nextInt(Canvas.getWindowSize()/5*3) / Canvas.getCircleSize() * Canvas.getCircleSize()), Canvas.getWindowSize()/5+(rnd.nextInt(Canvas.getWindowSize()/5*3) / Canvas.getCircleSize() * Canvas.getCircleSize()));
             ate = false;
         }
 

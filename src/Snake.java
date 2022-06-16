@@ -32,16 +32,20 @@ public class Snake {
         if(length>Canvas.getHIGHSCORE())
         Canvas.setHIGHSCORE(length);
 
-        if(lives<=0) {
+        System.out.println(lives);
+        if(lives<=1) {
             System.out.println("---");
-            lives=3;
+            Canvas.toggleNoLives();
             pelletsAte = 0;
             setLength();
             existingCircles.clear();
             existingCircles.add(new CirclePosition(Canvas.getWindowSize() / 2, Canvas.getWindowSize() / 2));
-            existingCircles.add(new CirclePosition(Canvas.getWindowSize() / 2, Canvas.getWindowSize() / 2 + 10));
+            existingCircles.add(new CirclePosition(Canvas.getWindowSize() / 2, Canvas.getWindowSize() / 2 + Canvas.getCircleSize()));
         }else{
             lives--;
+            for(int i = 0; i<existingCircles.size(); i++){
+                existingCircles.get(i).setDefaultPosition();
+            }
         }
             Canvas.setX(Canvas.getWindowSize() / 2);
             Canvas.setY(Canvas.getWindowSize() / 2);
