@@ -1,6 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * This is the class which initiates the GUI for the Snake program.
+ *
+ * @author Benjamin Dempsey
+ * @version 1.0.0
+ */
 public class GUI {
 
     public static void main(String[] args) {
