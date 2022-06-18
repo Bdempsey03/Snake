@@ -8,7 +8,6 @@ import java.io.IOException;
 
 
 public class Canvas extends JComponent {
-    private static Color color;
     /**
 
     NOTE: (windowSize/2) must be a multiple of (circleSize)
@@ -29,9 +28,9 @@ public class Canvas extends JComponent {
     private static int x = windowSize/2;
     private static int y = windowSize/2;
     private static final Color[] colours = {Color.GREEN, new Color(10,200,10)};
-    private static char direction = 'l';
+    private static char direction = 'u';
     public static volatile boolean FLAG = false;
-    private static int waitTime = 100;
+    private static final int tickRate = 80;
 
 
     private static int HIGHSCORE = 0;
@@ -54,15 +53,19 @@ public class Canvas extends JComponent {
                     @Override
                     public void keyPressed(KeyEvent e) {
                         if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                            if(direction!='u')
                             direction = 'd';
                         }
                         if (e.getKeyCode() == KeyEvent.VK_UP) {
+                            if(direction!='d')
                             direction = 'u';
                         }
                         if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                            if(direction!='r')
                             direction = 'l';
                         }
                         if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                            if(direction!='l')
                             direction = 'r';
                         }
                         requestFocusInWindow();
@@ -111,7 +114,7 @@ public class Canvas extends JComponent {
             case ('r') -> x += circleSize;
         }
         try {
-            Thread.sleep(waitTime);
+            Thread.sleep(tickRate);
             if(FLAG)
                 Thread.sleep(900);
             if(gameOver)
@@ -157,7 +160,6 @@ public class Canvas extends JComponent {
         if((snake.getHead().getY()<0||snake.getHead().getY()>windowSize)||(snake.getHead().getX()<0||snake.getHead().getX()>windowSize)){
             setFLAG(true);
             snake.reset();
-            System.out.println("hi");
 
             g2d.setColor(Color.RED);
             g2d.fillRect(0, 0, windowSize, windowSize);
@@ -199,11 +201,8 @@ public class Canvas extends JComponent {
     public void setFLAG(boolean x) {
         FLAG=x;
     }
-    public void setColor(Color color){
-        this.color=color;
-    }
     public void setCircleSize(int circleSize){
-        this.circleSize = circleSize;
+        Canvas.circleSize = circleSize;
     }
     public static int getWindowSize(){return windowSize;}
     public static void setX(int x){Canvas.x=x;}
